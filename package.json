@@ -1,0 +1,25 @@
+{
+  "name": "bhs-webapi",
+  "version": "0.1.0",
+  "description": "bhs-indonesia-webapp API monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:quiz-api": "npm run build --workspace=packages/quiz-api",
+    "package:quiz-api": "npm run package --workspace=packages/quiz-api",
+    "lint": "npm run lint --workspaces --if-present",
+    "seed:dev": "ENV=dev npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
+    "seed:test": "ENV=test npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
+    "seed:prod": "ENV=prod npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5",
+    "ts-node": "10.9.2"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
