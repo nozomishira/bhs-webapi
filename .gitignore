@@ -4,3 +4,4 @@ function.zip
 *.js.map
 .env
 .env.*
+.env.local

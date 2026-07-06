@@ -1,0 +1,92 @@
+name: Deploy quiz-api (dev)
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'packages/shared/**'
+      - 'packages/quiz-api/**'
+      - 'package.json'
+      - 'tsconfig.json'
+      - '.github/workflows/deploy-dev.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared + quiz-api
+        run: npm run build
+
+      - name: Package quiz-api for Lambda
+        working-directory: packages/quiz-api
+        run: |
+          mkdir -p deploy
+          cp -r dist/* deploy/
+          cp -r ../../node_modules deploy/
+          cd deploy && zip -r ../function.zip . && cd ..
+          rm -rf deploy
+          echo "function.zip size: $(du -h function.zip | cut -f1)"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          role-to-assume: arn:aws:iam::459532536546:role/dev-apne1-github-actions-webapi-role
+          aws-region: ap-northeast-1
+
+      - name: Get Lambda function name
+        id: cfn-outputs
+        run: |
+          FUNCTION_NAME=$(aws cloudformation describe-stacks \
+            --stack-name dev-bhs-indonesia-webapi \
+            --region ap-northeast-1 \
+            --query "Stacks[0].Outputs[?OutputKey=='QuizApiFunctionName'].OutputValue" \
+            --output text)
+
+          if [ -z "$FUNCTION_NAME" ] || [ "$FUNCTION_NAME" == "None" ]; then
+            echo "::error::QuizApiFunctionName not found in stack outputs."
+            exit 1
+          fi
+
+          echo "function_name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
+          echo "Lambda function: $FUNCTION_NAME"
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --zip-file fileb://packages/quiz-api/function.zip \
+            --region ap-northeast-1
+
+      - name: Wait for Lambda update
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --region ap-northeast-1
+
+      - name: Verify deployment
+        run: |
+          echo "Deployment complete. Testing health endpoint..."
+          API_ENDPOINT=$(aws cloudformation describe-stacks \
+            --stack-name dev-bhs-indonesia-webapi \
+            --region ap-northeast-1 \
+            --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+            --output text)
+          curl -s "$API_ENDPOINT/health" | jq .
