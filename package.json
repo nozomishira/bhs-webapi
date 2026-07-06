@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "build:quiz-api": "npm run build --workspace=packages/quiz-api",
-    "package:quiz-api": "npm run package --workspace=packages/quiz-api",
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api",
+    "build:quiz-api": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api",
+    "package:quiz-api": "npm run build --workspace=packages/shared && npm run package --workspace=packages/quiz-api",
     "lint": "npm run lint --workspaces --if-present",
     "seed:dev": "ENV=dev npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
     "seed:test": "ENV=test npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",

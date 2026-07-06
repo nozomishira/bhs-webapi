@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:clean": "rimraf dist && tsc",
-    "package": "npm run build:clean && cd dist && zip -r ../function.zip . && cd ..",
+    "package": "npm run build:clean && cp -r node_modules dist/ && cd dist && zip -r ../function.zip . && cd ..",
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
