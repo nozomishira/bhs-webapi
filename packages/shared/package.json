@@ -9,7 +9,7 @@
     "build:clean": "rimraf dist && tsc"
   },
   "devDependencies": {
-    "typescript": "5.4.5",
-    "rimraf": "5.0.7"
+    "typescript": "^5.7.3",
+    "rimraf": "^6.0.1"
   }
 }

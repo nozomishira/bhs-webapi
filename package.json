@@ -10,14 +10,13 @@
     "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api",
     "build:quiz-api": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api",
     "package:quiz-api": "npm run build --workspace=packages/shared && npm run package --workspace=packages/quiz-api",
-    "lint": "npm run lint --workspaces --if-present",
     "seed:dev": "ENV=dev npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
     "seed:test": "ENV=test npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
     "seed:prod": "ENV=prod npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts"
   },
   "devDependencies": {
-    "typescript": "5.4.5",
-    "ts-node": "10.9.2"
+    "typescript": "^5.7.3",
+    "ts-node": "^10.9.2"
   },
   "engines": {
     "node": ">=24.0.0"
