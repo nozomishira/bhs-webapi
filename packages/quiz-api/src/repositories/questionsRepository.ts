@@ -61,8 +61,24 @@ export async function getRandomQuestions(
   return batchGetQuestions(pickRandom(allKeys, count)).then((r) => r.map(toResponse));
 }
 
-export async function getQuestionCountByLevel(level: number): Promise<number> {
+export async function getQuestionCountByLevel(level: number, type?: QuestionType): Promise<number> {
   const pk = levelToPk(level);
+
+  if (type) {
+    // type フィルタあり: FilterExpression を使う
+    const result = await ddb.send(
+      new QueryCommand({
+        TableName: TABLE,
+        KeyConditionExpression: 'pk = :pk',
+        FilterExpression: '#t = :type',
+        ExpressionAttributeNames: { '#t': 'type' },
+        ExpressionAttributeValues: { ':pk': pk, ':type': type },
+        Select: 'COUNT',
+      })
+    );
+    return result.Count ?? 0;
+  }
+
   const result = await ddb.send(
     new QueryCommand({
       TableName: TABLE,
