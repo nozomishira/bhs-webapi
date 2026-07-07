@@ -1,0 +1,52 @@
+import { SeedQuestion } from '../seed-data';
+
+// Level 1: 単語20問 + 文法20問 = 40問
+// テーマ: 基本的な挨拶・数字・色・代名詞 / 基本文型・疑問文・否定文
+
+export const level1Vocabulary: SeedQuestion[] = [
+  { questionId: 'l1-v001', level: 1, type: 'vocabulary', category: 'greeting', question: '「おはようございます」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat malam', 'Selamat tidur'], correctAnswer: 0, explanation: 'Selamat pagi は朝の挨拶です。pagi = 朝。', indonesianWord: 'Selamat pagi' },
+  { questionId: 'l1-v002', level: 1, type: 'vocabulary', category: 'greeting', question: '「こんにちは（昼）」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat sore', 'Selamat malam'], correctAnswer: 1, explanation: 'Selamat siang は昼の挨拶（11時〜15時頃）。', indonesianWord: 'Selamat siang' },
+  { questionId: 'l1-v003', level: 1, type: 'vocabulary', category: 'greeting', question: '「こんばんは」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat sore', 'Selamat malam'], correctAnswer: 3, explanation: 'Selamat malam は夜の挨拶。Selamat sore は夕方の挨拶。', indonesianWord: 'Selamat malam' },
+  { questionId: 'l1-v004', level: 1, type: 'vocabulary', category: 'greeting', question: '「さようなら」の最も一般的なインドネシア語は？', options: ['Terima kasih', 'Sampai jumpa', 'Permisi', 'Maaf'], correctAnswer: 1, explanation: 'Sampai jumpa = またお会いしましょう。', indonesianWord: 'Sampai jumpa' },
+  { questionId: 'l1-v005', level: 1, type: 'vocabulary', category: 'greeting', question: '「ありがとう」のインドネシア語は？', options: ['Maaf', 'Permisi', 'Terima kasih', 'Tolong'], correctAnswer: 2, explanation: 'Terima kasih = ありがとう。返答は「Sama-sama」。', indonesianWord: 'Terima kasih' },
+  { questionId: 'l1-v006', level: 1, type: 'vocabulary', category: 'greeting', question: '「すみません（謝罪）」のインドネシア語は？', options: ['Permisi', 'Maaf', 'Tolong', 'Silakan'], correctAnswer: 1, explanation: 'Maaf = ごめんなさい。Permisi = 失礼します（通る時）。', indonesianWord: 'Maaf' },
+  { questionId: 'l1-v007', level: 1, type: 'vocabulary', category: 'number', question: '「1（一）」のインドネシア語は？', options: ['Dua', 'Tiga', 'Satu', 'Empat'], correctAnswer: 2, explanation: 'Satu = 1。satu, dua, tiga, empat, lima...', indonesianWord: 'Satu' },
+  { questionId: 'l1-v008', level: 1, type: 'vocabulary', category: 'number', question: '「5（五）」のインドネシア語は？', options: ['Empat', 'Lima', 'Enam', 'Tujuh'], correctAnswer: 1, explanation: 'Lima = 5。enam(6), tujuh(7), delapan(8), sembilan(9)。', indonesianWord: 'Lima' },
+  { questionId: 'l1-v009', level: 1, type: 'vocabulary', category: 'number', question: '「10（十）」のインドネシア語は？', options: ['Sembilan', 'Sepuluh', 'Sebelas', 'Dua belas'], correctAnswer: 1, explanation: 'Sepuluh = 10。se- は「一つの」という接頭辞。', indonesianWord: 'Sepuluh' },
+  { questionId: 'l1-v010', level: 1, type: 'vocabulary', category: 'number', question: '「3（三）」のインドネシア語は？', options: ['Satu', 'Dua', 'Tiga', 'Empat'], correctAnswer: 2, explanation: 'Tiga = 3。基本数字は暗記必須。', indonesianWord: 'Tiga' },
+  { questionId: 'l1-v011', level: 1, type: 'vocabulary', category: 'color', question: '「赤」のインドネシア語は？', options: ['Biru', 'Hijau', 'Merah', 'Kuning'], correctAnswer: 2, explanation: 'Merah = 赤。国旗 Merah Putih の赤。', indonesianWord: 'Merah' },
+  { questionId: 'l1-v012', level: 1, type: 'vocabulary', category: 'color', question: '「白」のインドネシア語は？', options: ['Hitam', 'Putih', 'Abu-abu', 'Coklat'], correctAnswer: 1, explanation: 'Putih = 白。国旗 Merah Putih の白。', indonesianWord: 'Putih' },
+  { questionId: 'l1-v013', level: 1, type: 'vocabulary', category: 'color', question: '「青」のインドネシア語は？', options: ['Merah', 'Kuning', 'Biru', 'Hijau'], correctAnswer: 2, explanation: 'Biru = 青。Hijau = 緑、Kuning = 黄色。', indonesianWord: 'Biru' },
+  { questionId: 'l1-v014', level: 1, type: 'vocabulary', category: 'color', question: '「黒」のインドネシア語は？', options: ['Putih', 'Hitam', 'Coklat', 'Abu-abu'], correctAnswer: 1, explanation: 'Hitam = 黒。Abu-abu = 灰色、Coklat = 茶色。', indonesianWord: 'Hitam' },
+  { questionId: 'l1-v015', level: 1, type: 'vocabulary', category: 'color', question: '「緑」のインドネシア語は？', options: ['Biru', 'Kuning', 'Hijau', 'Merah'], correctAnswer: 2, explanation: 'Hijau = 緑。自然豊かなインドネシアの色。', indonesianWord: 'Hijau' },
+  { questionId: 'l1-v016', level: 1, type: 'vocabulary', category: 'pronoun', question: '「私」のインドネシア語は？', options: ['Kamu', 'Dia', 'Saya', 'Mereka'], correctAnswer: 2, explanation: 'Saya = 私（丁寧）。Aku もカジュアルに使われる。', indonesianWord: 'Saya' },
+  { questionId: 'l1-v017', level: 1, type: 'vocabulary', category: 'pronoun', question: '「あなた」の丁寧なインドネシア語は？', options: ['Saya', 'Kamu', 'Anda', 'Dia'], correctAnswer: 2, explanation: 'Anda = あなた（フォーマル）。Kamu はカジュアル。', indonesianWord: 'Anda' },
+  { questionId: 'l1-v018', level: 1, type: 'vocabulary', category: 'pronoun', question: '「彼・彼女」のインドネシア語は？', options: ['Kami', 'Kita', 'Mereka', 'Dia'], correctAnswer: 3, explanation: 'Dia = 彼・彼女（性別区別なし）。', indonesianWord: 'Dia' },
+  { questionId: 'l1-v019', level: 1, type: 'vocabulary', category: 'pronoun', question: '「私たち（相手を含む）」のインドネシア語は？', options: ['Kami', 'Kita', 'Mereka', 'Kalian'], correctAnswer: 1, explanation: 'Kita = 私たち（聞き手を含む）。Kami = 私たち（聞き手を含まない）。', indonesianWord: 'Kita' },
+  { questionId: 'l1-v020', level: 1, type: 'vocabulary', category: 'greeting', question: '「どういたしまして」のインドネシア語は？', options: ['Terima kasih', 'Sama-sama', 'Maaf', 'Permisi'], correctAnswer: 1, explanation: 'Sama-sama = どういたしまして。Terima kasih への返答。', indonesianWord: 'Sama-sama' },
+];
+
+export const level1Grammar: SeedQuestion[] = [
+  { questionId: 'l1-g001', level: 1, type: 'grammar', category: 'basic-sentence', question: '「私は学生です」を正しく表すインドネシア語は？', options: ['Saya siswa adalah.', 'Siswa saya adalah.', 'Saya adalah siswa.', 'Adalah saya siswa.'], correctAnswer: 2, explanation: '基本語順: 主語 + adalah + 名詞。「Saya adalah siswa.」が正しい。' },
+  { questionId: 'l1-g002', level: 1, type: 'grammar', category: 'basic-sentence', question: '「これは何ですか？」のインドネシア語は？', options: ['Siapa ini?', 'Apa ini?', 'Di mana ini?', 'Bagaimana ini?'], correctAnswer: 1, explanation: 'Apa = 何。「Apa ini?」= これは何？' },
+  { questionId: 'l1-g003', level: 1, type: 'grammar', category: 'question', question: '「あなたの名前は何ですか？」のインドネシア語は？', options: ['Siapa nama Anda?', 'Apa nama Anda?', 'Di mana nama Anda?', 'Bagaimana nama Anda?'], correctAnswer: 1, explanation: '「Apa nama Anda?」が最も一般的。' },
+  { questionId: 'l1-g004', level: 1, type: 'grammar', category: 'negation', question: '「私は学生ではありません」のインドネシア語は？', options: ['Saya tidak adalah siswa.', 'Saya bukan siswa.', 'Saya tidak siswa.', 'Saya adalah bukan siswa.'], correctAnswer: 1, explanation: '名詞の否定は「bukan」。動詞の否定は「tidak」。' },
+  { questionId: 'l1-g005', level: 1, type: 'grammar', category: 'possession', question: '「私の名前はアニです」のインドネシア語は？', options: ['Nama saya Ani.', 'Saya nama Ani.', 'Ani adalah nama saya.', 'Nama Ani saya.'], correctAnswer: 0, explanation: '所有は名詞の後に所有者を置く。「Nama saya = 私の名前」。' },
+  { questionId: 'l1-g006', level: 1, type: 'grammar', category: 'basic-sentence', question: '「これは本です」のインドネシア語は？', options: ['Ini buku.', 'Buku ini adalah.', 'Adalah ini buku.', 'Ini buku adalah.'], correctAnswer: 0, explanation: '「Ini + 名詞」で「これは〜です」。adalah は省略可能。' },
+  { questionId: 'l1-g007', level: 1, type: 'grammar', category: 'question', question: '「誰？」を表すインドネシア語は？', options: ['Apa', 'Siapa', 'Kapan', 'Di mana'], correctAnswer: 1, explanation: 'Siapa = 誰。「Siapa nama Anda?」= あなたは誰ですか？（名前は？）' },
+  { questionId: 'l1-g008', level: 1, type: 'grammar', category: 'question', question: '「どこ？」を表すインドネシア語は？', options: ['Kapan', 'Mengapa', 'Di mana', 'Bagaimana'], correctAnswer: 2, explanation: 'Di mana = どこに？ Di = 〜で/に、mana = どこ。' },
+  { questionId: 'l1-g009', level: 1, type: 'grammar', category: 'question', question: '「いつ？」を表すインドネシア語は？', options: ['Di mana', 'Kapan', 'Berapa', 'Siapa'], correctAnswer: 1, explanation: 'Kapan = いつ？ 「Kapan Anda datang?」= いつ来ますか？' },
+  { questionId: 'l1-g010', level: 1, type: 'grammar', category: 'question', question: '「なぜ？」を表すインドネシア語は？', options: ['Bagaimana', 'Berapa', 'Mengapa', 'Kapan'], correctAnswer: 2, explanation: 'Mengapa / Kenapa = なぜ？ どうして？' },
+  { questionId: 'l1-g011', level: 1, type: 'grammar', category: 'basic-sentence', question: '「はい」のインドネシア語は？', options: ['Tidak', 'Ya', 'Bukan', 'Belum'], correctAnswer: 1, explanation: 'Ya = はい。Tidak = いいえ（動詞/形容詞の否定）。' },
+  { questionId: 'l1-g012', level: 1, type: 'grammar', category: 'basic-sentence', question: '「いいえ（動詞の否定）」のインドネシア語は？', options: ['Bukan', 'Tidak', 'Belum', 'Jangan'], correctAnswer: 1, explanation: 'Tidak = いいえ / 〜ない（動詞・形容詞の否定）。' },
+  { questionId: 'l1-g013', level: 1, type: 'grammar', category: 'negation', question: '「いいえ（名詞の否定）」のインドネシア語は？', options: ['Tidak', 'Bukan', 'Belum', 'Jangan'], correctAnswer: 1, explanation: 'Bukan = 〜ではない（名詞の否定）。「Ini bukan buku.」= これは本ではない。' },
+  { questionId: 'l1-g014', level: 1, type: 'grammar', category: 'possession', question: '「あなたの本」のインドネシア語は？', options: ['Buku saya', 'Buku Anda', 'Anda buku', 'Buku dia'], correctAnswer: 1, explanation: '所有: 名詞 + 所有者。「Buku Anda」= あなたの本。' },
+  { questionId: 'l1-g015', level: 1, type: 'grammar', category: 'possession', question: '「彼の家」のインドネシア語は？', options: ['Dia rumah', 'Rumah saya', 'Rumah dia', 'Rumah kamu'], correctAnswer: 2, explanation: '「Rumah dia」= 彼/彼女の家。名詞 + 所有者の順。' },
+  { questionId: 'l1-g016', level: 1, type: 'grammar', category: 'demonstrative', question: '「これ」のインドネシア語は？', options: ['Itu', 'Ini', 'Sini', 'Sana'], correctAnswer: 1, explanation: 'Ini = これ（近い）。Itu = あれ・それ（遠い）。' },
+  { questionId: 'l1-g017', level: 1, type: 'grammar', category: 'demonstrative', question: '「あれ」のインドネシア語は？', options: ['Ini', 'Itu', 'Sini', 'Situ'], correctAnswer: 1, explanation: 'Itu = あれ・それ（遠い）。Ini = これ（近い）。' },
+  { questionId: 'l1-g018', level: 1, type: 'grammar', category: 'basic-sentence', question: '「あれは猫です」のインドネシア語は？', options: ['Itu kucing.', 'Kucing itu.', 'Adalah itu kucing.', 'Kucing itu adalah.'], correctAnswer: 0, explanation: '「Itu + 名詞」= あれは〜です。「Itu kucing.」= あれは猫です。' },
+  { questionId: 'l1-g019', level: 1, type: 'grammar', category: 'basic-sentence', question: '「ada」の基本的な意味は？', options: ['〜する', '〜ある・いる', '〜なる', '〜できる'], correctAnswer: 1, explanation: 'Ada = ある・いる（存在を表す）。「Ada air?」= 水はありますか？' },
+  { questionId: 'l1-g020', level: 1, type: 'grammar', category: 'question', question: '「いくつ？・何個？」を表すインドネシア語は？', options: ['Apa', 'Siapa', 'Berapa', 'Mengapa'], correctAnswer: 2, explanation: 'Berapa = いくつ・何個・いくら。「Berapa harganya?」= いくらですか？' },
+];
+
+export const level1Questions: SeedQuestion[] = [...level1Vocabulary, ...level1Grammar];

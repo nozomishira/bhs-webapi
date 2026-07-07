@@ -1,143 +1,21 @@
 /**
- * 初期問題データ定義 - Level 1〜5 各20問（単語・文法混合）
+ * 初期問題データ定義
+ * Level 1〜5: 各レベル 単語20問 + 文法20問 = 40問
+ *
+ * 各レベルのデータは scripts/data/levelN.ts に分割
  */
 import { QuestionRecord } from '@bhs/shared';
 
 export type SeedQuestion = Omit<QuestionRecord, 'pk' | 'sk' | 'levelKey' | 'createdAt' | 'updatedAt'>;
 
-// ============================================================
-// Level 1: 基本的な挨拶・数字・色
-// ============================================================
-export const level1Questions: SeedQuestion[] = [
-  { questionId: 'l1-001', level: 1, type: 'vocabulary', category: 'greeting', question: '「おはようございます」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat malam', 'Selamat tidur'], correctAnswer: 0, explanation: 'Selamat pagi は朝の挨拶です。pagi = 朝。Selamat siang は昼、Selamat malam は夜の挨拶。', indonesianWord: 'Selamat pagi' },
-  { questionId: 'l1-002', level: 1, type: 'vocabulary', category: 'greeting', question: '「こんにちは（昼）」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat sore', 'Selamat malam'], correctAnswer: 1, explanation: 'Selamat siang は昼の挨拶（11時〜15時頃）。siang = 昼。', indonesianWord: 'Selamat siang' },
-  { questionId: 'l1-003', level: 1, type: 'vocabulary', category: 'greeting', question: '「こんばんは」に相当するインドネシア語は？', options: ['Selamat pagi', 'Selamat siang', 'Selamat sore', 'Selamat malam'], correctAnswer: 3, explanation: 'Selamat malam は夜の挨拶。malam = 夜。Selamat sore は夕方の挨拶。', indonesianWord: 'Selamat malam' },
-  { questionId: 'l1-004', level: 1, type: 'vocabulary', category: 'greeting', question: '「さようなら」の最も一般的なインドネシア語は？', options: ['Terima kasih', 'Sampai jumpa', 'Permisi', 'Maaf'], correctAnswer: 1, explanation: 'Sampai jumpa は「またお会いしましょう」という別れの挨拶。Terima kasih = ありがとう。', indonesianWord: 'Sampai jumpa' },
-  { questionId: 'l1-005', level: 1, type: 'vocabulary', category: 'greeting', question: '「ありがとう」のインドネシア語は？', options: ['Maaf', 'Permisi', 'Terima kasih', 'Tolong'], correctAnswer: 2, explanation: 'Terima kasih は「ありがとう」。返答は「Sama-sama（どういたしまして）」。', indonesianWord: 'Terima kasih' },
-  { questionId: 'l1-006', level: 1, type: 'vocabulary', category: 'greeting', question: '「すみません（謝罪）」のインドネシア語は？', options: ['Permisi', 'Maaf', 'Tolong', 'Silakan'], correctAnswer: 1, explanation: 'Maaf は謝罪「ごめんなさい・すみません」。Permisi は「失礼します」（通り抜ける時など）。', indonesianWord: 'Maaf' },
-  { questionId: 'l1-007', level: 1, type: 'vocabulary', category: 'number', question: '「1（一）」のインドネシア語は？', options: ['Dua', 'Tiga', 'Satu', 'Empat'], correctAnswer: 2, explanation: 'Satu = 1。数字: satu(1), dua(2), tiga(3), empat(4), lima(5)。', indonesianWord: 'Satu' },
-  { questionId: 'l1-008', level: 1, type: 'vocabulary', category: 'number', question: '「5（五）」のインドネシア語は？', options: ['Empat', 'Lima', 'Enam', 'Tujuh'], correctAnswer: 1, explanation: 'Lima = 5。続けて: enam(6), tujuh(7), delapan(8), sembilan(9), sepuluh(10)。', indonesianWord: 'Lima' },
-  { questionId: 'l1-009', level: 1, type: 'vocabulary', category: 'number', question: '「10（十）」のインドネシア語は？', options: ['Sembilan', 'Sepuluh', 'Sebelas', 'Dua belas'], correctAnswer: 1, explanation: 'Sepuluh = 10。se- は「一つの」という接頭辞。Sebelas = 11、dua belas = 12。', indonesianWord: 'Sepuluh' },
-  { questionId: 'l1-010', level: 1, type: 'vocabulary', category: 'color', question: '「赤」のインドネシア語は？', options: ['Biru', 'Hijau', 'Merah', 'Kuning'], correctAnswer: 2, explanation: 'Merah = 赤。インドネシアの国旗（Merah Putih）の赤もこの単語。', indonesianWord: 'Merah' },
-  { questionId: 'l1-011', level: 1, type: 'vocabulary', category: 'color', question: '「白」のインドネシア語は？', options: ['Hitam', 'Putih', 'Abu-abu', 'Coklat'], correctAnswer: 1, explanation: 'Putih = 白。国旗 Merah Putih の白はこれ。Hitam = 黒。', indonesianWord: 'Putih' },
-  { questionId: 'l1-012', level: 1, type: 'vocabulary', category: 'color', question: '「青」のインドネシア語は？', options: ['Merah', 'Kuning', 'Biru', 'Hijau'], correctAnswer: 2, explanation: 'Biru = 青。Hijau = 緑、Kuning = 黄色。', indonesianWord: 'Biru' },
-  { questionId: 'l1-013', level: 1, type: 'vocabulary', category: 'pronoun', question: '「私」のインドネシア語は？', options: ['Kamu', 'Dia', 'Saya', 'Mereka'], correctAnswer: 2, explanation: 'Saya = 私（丁寧）。Aku も「私」だがカジュアル。Kamu = あなた（カジュアル）。', indonesianWord: 'Saya' },
-  { questionId: 'l1-014', level: 1, type: 'vocabulary', category: 'pronoun', question: '「あなた」の丁寧なインドネシア語は？', options: ['Saya', 'Kamu', 'Anda', 'Dia'], correctAnswer: 2, explanation: 'Anda = あなた（丁寧・フォーマル）。Kamu は友人間のカジュアルな表現。', indonesianWord: 'Anda' },
-  { questionId: 'l1-015', level: 1, type: 'vocabulary', category: 'pronoun', question: '「彼・彼女」のインドネシア語は？', options: ['Kami', 'Kita', 'Mereka', 'Dia'], correctAnswer: 3, explanation: 'Dia = 彼・彼女（性別の区別なし）。Mereka = 彼ら・彼女たち（複数）。', indonesianWord: 'Dia' },
-  { questionId: 'l1-016', level: 1, type: 'grammar', category: 'basic-sentence', question: '「私は学生です」を正しく表すインドネシア語は？', options: ['Saya siswa adalah.', 'Siswa saya adalah.', 'Saya adalah siswa.', 'Adalah saya siswa.'], correctAnswer: 2, explanation: 'インドネシア語の基本語順は 主語 + adalah(〜です) + 名詞/形容詞。「Saya adalah siswa.」が正しい。' },
-  { questionId: 'l1-017', level: 1, type: 'grammar', category: 'basic-sentence', question: '「これは何ですか？」のインドネシア語は？', options: ['Siapa ini?', 'Apa ini?', 'Di mana ini?', 'Bagaimana ini?'], correctAnswer: 1, explanation: 'Apa = 何。「Apa ini?」で「これは何ですか？」。Siapa = 誰、Di mana = どこ。' },
-  { questionId: 'l1-018', level: 1, type: 'grammar', category: 'question', question: '「あなたの名前は何ですか？」のインドネシア語は？', options: ['Siapa nama Anda?', 'Apa nama Anda?', 'Di mana nama Anda?', 'Bagaimana nama Anda?'], correctAnswer: 1, explanation: '名前を尋ねる場合は「Apa nama Anda?」または「Siapa nama Anda?」。どちらも正しいが、より一般的なのは Apa。' },
-  { questionId: 'l1-019', level: 1, type: 'grammar', category: 'negation', question: '「私は学生ではありません」のインドネシア語は？', options: ['Saya tidak adalah siswa.', 'Saya bukan siswa.', 'Saya tidak siswa.', 'Saya adalah bukan siswa.'], correctAnswer: 1, explanation: '名詞・形容詞の否定は「bukan」を使う。「Saya bukan siswa.」が正しい。動詞の否定は「tidak」。' },
-  { questionId: 'l1-020', level: 1, type: 'grammar', category: 'possession', question: '「私の名前はアニです」のインドネシア語は？', options: ['Nama saya Ani.', 'Saya nama Ani.', 'Ani adalah nama saya.', 'Nama Ani saya.'], correctAnswer: 0, explanation: 'インドネシア語では所有を表す場合、名詞の後に所有者を置く。「Nama saya = 私の名前」→「Nama saya Ani.」' },
-];
+// 各レベルのデータをインポート
+import { level1Questions } from './data/level1';
+import { level2Questions } from './data/level2';
+import { level3Questions } from './data/level3';
+import { level4Questions } from './data/level4';
+import { level5Questions } from './data/level5';
 
-// ============================================================
-// Level 2: 日常単語・家族・食べ物
-// ============================================================
-export const level2Questions: SeedQuestion[] = [
-  { questionId: 'l2-001', level: 2, type: 'vocabulary', category: 'family', question: '「お父さん・父」のインドネシア語は？', options: ['Ibu', 'Kakak', 'Adik', 'Bapak'], correctAnswer: 3, explanation: 'Bapak（またはAyah）= 父。Ibu = 母。Kakak = 兄・姉。Adik = 弟・妹。', indonesianWord: 'Bapak' },
-  { questionId: 'l2-002', level: 2, type: 'vocabulary', category: 'family', question: '「お母さん・母」のインドネシア語は？', options: ['Bapak', 'Ibu', 'Nenek', 'Kakek'], correctAnswer: 1, explanation: 'Ibu（またはMama）= 母。Nenek = 祖母、Kakek = 祖父。', indonesianWord: 'Ibu' },
-  { questionId: 'l2-003', level: 2, type: 'vocabulary', category: 'food', question: '「ご飯・米」のインドネシア語は？', options: ['Mie', 'Roti', 'Nasi', 'Sayur'], correctAnswer: 2, explanation: 'Nasi = 炊いたご飯・米料理。Mie = 麺、Roti = パン、Sayur = 野菜。', indonesianWord: 'Nasi' },
-  { questionId: 'l2-004', level: 2, type: 'vocabulary', category: 'food', question: '「水」のインドネシア語は？', options: ['Susu', 'Jus', 'Teh', 'Air'], correctAnswer: 3, explanation: 'Air = 水。Air putih で「白い水＝真水」。Susu = ミルク、Teh = お茶。', indonesianWord: 'Air' },
-  { questionId: 'l2-005', level: 2, type: 'vocabulary', category: 'food', question: '「食べる」のインドネシア語は？', options: ['Minum', 'Masak', 'Makan', 'Beli'], correctAnswer: 2, explanation: 'Makan = 食べる。Minum = 飲む。Nasi goreng は「炒めたご飯＝チャーハン」。', indonesianWord: 'Makan' },
-  { questionId: 'l2-006', level: 2, type: 'vocabulary', category: 'food', question: '「飲む」のインドネシア語は？', options: ['Makan', 'Tidur', 'Minum', 'Jalan'], correctAnswer: 2, explanation: 'Minum = 飲む。「Minum air」= 水を飲む。', indonesianWord: 'Minum' },
-  { questionId: 'l2-007', level: 2, type: 'vocabulary', category: 'place', question: '「家」のインドネシア語は？', options: ['Kantor', 'Sekolah', 'Rumah', 'Toko'], correctAnswer: 2, explanation: 'Rumah = 家。Rumah sakit = 病院（直訳: 病気の家）。Kantor = オフィス。', indonesianWord: 'Rumah' },
-  { questionId: 'l2-008', level: 2, type: 'vocabulary', category: 'place', question: '「学校」のインドネシア語は？', options: ['Rumah', 'Kantor', 'Pasar', 'Sekolah'], correctAnswer: 3, explanation: 'Sekolah = 学校。Pasar = 市場、Kantor = 会社・オフィス。', indonesianWord: 'Sekolah' },
-  { questionId: 'l2-009', level: 2, type: 'vocabulary', category: 'adjective', question: '「大きい」のインドネシア語は？', options: ['Kecil', 'Panjang', 'Besar', 'Pendek'], correctAnswer: 2, explanation: 'Besar = 大きい。Kecil = 小さい。Panjang = 長い、Pendek = 短い・背が低い。', indonesianWord: 'Besar' },
-  { questionId: 'l2-010', level: 2, type: 'vocabulary', category: 'adjective', question: '「良い・善い」のインドネシア語は？', options: ['Jelek', 'Buruk', 'Baik', 'Jahat'], correctAnswer: 2, explanation: 'Baik = 良い・善い。「Baik-baik saja」= 元気です。Jelek/Buruk = 悪い・醜い。', indonesianWord: 'Baik' },
-  { questionId: 'l2-011', level: 2, type: 'vocabulary', category: 'time', question: '「今日」のインドネシア語は？', options: ['Kemarin', 'Besok', 'Hari ini', 'Minggu ini'], correctAnswer: 2, explanation: 'Hari ini = 今日。Kemarin = 昨日、Besok = 明日。Hari = 日・曜日。', indonesianWord: 'Hari ini' },
-  { questionId: 'l2-012', level: 2, type: 'vocabulary', category: 'time', question: '「明日」のインドネシア語は？', options: ['Kemarin', 'Hari ini', 'Besok', 'Lusa'], correctAnswer: 2, explanation: 'Besok = 明日。Lusa = 明後日。Kemarin = 昨日。', indonesianWord: 'Besok' },
-  { questionId: 'l2-013', level: 2, type: 'vocabulary', category: 'body', question: '「頭」のインドネシア語は？', options: ['Tangan', 'Kaki', 'Kepala', 'Mata'], correctAnswer: 2, explanation: 'Kepala = 頭。Mata = 目、Tangan = 手・腕、Kaki = 足・脚。', indonesianWord: 'Kepala' },
-  { questionId: 'l2-014', level: 2, type: 'vocabulary', category: 'body', question: '「目」のインドネシア語は？', options: ['Hidung', 'Mulut', 'Telinga', 'Mata'], correctAnswer: 3, explanation: 'Mata = 目。Hidung = 鼻、Mulut = 口、Telinga = 耳。', indonesianWord: 'Mata' },
-  { questionId: 'l2-015', level: 2, type: 'vocabulary', category: 'transport', question: '「車」のインドネシア語は？', options: ['Sepeda', 'Motor', 'Mobil', 'Bus'], correctAnswer: 2, explanation: 'Mobil = 車（automobile から）。Motor = バイク、Sepeda = 自転車。', indonesianWord: 'Mobil' },
-  { questionId: 'l2-016', level: 2, type: 'grammar', category: 'verb', question: '「私はご飯を食べます」のインドネシア語は？', options: ['Nasi saya makan.', 'Makan saya nasi.', 'Saya makan nasi.', 'Saya nasi makan.'], correctAnswer: 2, explanation: 'インドネシア語の語順は 主語(S)+動詞(V)+目的語(O)。「Saya makan nasi.」が正しい。' },
-  { questionId: 'l2-017', level: 2, type: 'grammar', category: 'negation', question: '「私はご飯を食べません（動詞の否定）」のインドネシア語は？', options: ['Saya bukan makan nasi.', 'Saya tidak makan nasi.', 'Saya makan tidak nasi.', 'Tidak saya makan nasi.'], correctAnswer: 1, explanation: '動詞の否定は「tidak + 動詞」。「Saya tidak makan nasi.」が正しい。名詞の否定は bukan。' },
-  { questionId: 'l2-018', level: 2, type: 'grammar', category: 'question', question: '「あなたはどこから来ましたか？」のインドネシア語は？', options: ['Anda dari mana?', 'Anda ke mana?', 'Anda di mana?', 'Anda dengan mana?'], correctAnswer: 0, explanation: 'dari = 〜から（出発点）。「Anda dari mana?」= あなたはどこから？。di mana = どこに（場所）、ke mana = どこへ（方向）。' },
-  { questionId: 'l2-019', level: 2, type: 'grammar', category: 'adjective-usage', question: '「これは大きい家です」のインドネシア語は？', options: ['Ini rumah besar.', 'Ini besar rumah.', 'Besar ini rumah.', 'Rumah ini besar adalah.'], correctAnswer: 0, explanation: 'インドネシア語は形容詞が名詞の後に置かれる。「rumah besar = 大きい家」→「Ini rumah besar.」' },
-  { questionId: 'l2-020', level: 2, type: 'grammar', category: 'preposition', question: '「私は学校にいます」のインドネシア語は？', options: ['Saya ke sekolah.', 'Saya dari sekolah.', 'Saya di sekolah.', 'Saya dengan sekolah.'], correctAnswer: 2, explanation: 'di = 〜に・〜で（場所を示す前置詞）。「Saya di sekolah.」= 私は学校にいます。ke = 〜へ（方向）。' },
-];
-
-// ============================================================
-// Level 3: 旅行・買い物・時間表現
-// ============================================================
-export const level3Questions: SeedQuestion[] = [
-  { questionId: 'l3-001', level: 3, type: 'vocabulary', category: 'travel', question: '「空港」のインドネシア語は？', options: ['Stasiun', 'Pelabuhan', 'Bandara', 'Terminal'], correctAnswer: 2, explanation: 'Bandara（Bandar Udara の略）= 空港。Stasiun = 駅、Pelabuhan = 港。', indonesianWord: 'Bandara' },
-  { questionId: 'l3-002', level: 3, type: 'vocabulary', category: 'travel', question: '「ホテル」のインドネシア語は？', options: ['Rumah', 'Hotel', 'Wisma', 'Losmen'], correctAnswer: 1, explanation: 'Hotel = ホテル（そのまま借用語）。Wisma = ゲストハウス、Losmen = 安宿。', indonesianWord: 'Hotel' },
-  { questionId: 'l3-003', level: 3, type: 'vocabulary', category: 'shopping', question: '「いくらですか？」のインドネシア語は？', options: ['Apa ini?', 'Di mana ini?', 'Berapa harganya?', 'Kapan ini?'], correctAnswer: 2, explanation: 'Berapa harganya? = いくらですか？。Berapa = いくら・何個、harga = 値段、-nya は定冠詞的な接尾辞。', indonesianWord: 'Berapa harganya?' },
-  { questionId: 'l3-004', level: 3, type: 'vocabulary', category: 'shopping', question: '「高い（値段）」のインドネシア語は？', options: ['Murah', 'Mahal', 'Bagus', 'Baru'], correctAnswer: 1, explanation: 'Mahal = 高い（値段）。Murah = 安い。Bagus = 良い・素晴らしい。', indonesianWord: 'Mahal' },
-  { questionId: 'l3-005', level: 3, type: 'vocabulary', category: 'shopping', question: '「安い」のインドネシア語は？', options: ['Mahal', 'Murah', 'Bagus', 'Baru'], correctAnswer: 1, explanation: 'Murah = 安い。交渉の際は「Murah sedikit dong!（少し安くして！）」が使える。', indonesianWord: 'Murah' },
-  { questionId: 'l3-006', level: 3, type: 'vocabulary', category: 'time', question: '「何時ですか？」のインドネシア語は？', options: ['Berapa harganya?', 'Jam berapa sekarang?', 'Di mana jam?', 'Kapan jam?'], correctAnswer: 1, explanation: 'Jam berapa sekarang? = 今何時ですか？。Jam = 時計・時間、berapa = いくつ・何、sekarang = 今。', indonesianWord: 'Jam berapa sekarang?' },
-  { questionId: 'l3-007', level: 3, type: 'vocabulary', category: 'time', question: '「今週」のインドネシア語は？', options: ['Bulan ini', 'Tahun ini', 'Minggu ini', 'Hari ini'], correctAnswer: 2, explanation: 'Minggu ini = 今週。Minggu = 週・日曜日。Bulan ini = 今月、Tahun ini = 今年。', indonesianWord: 'Minggu ini' },
-  { questionId: 'l3-008', level: 3, type: 'vocabulary', category: 'direction', question: '「右」のインドネシア語は？', options: ['Kiri', 'Kanan', 'Lurus', 'Belakang'], correctAnswer: 1, explanation: 'Kanan = 右。Kiri = 左。Lurus = まっすぐ。「Belok kanan = 右折」。', indonesianWord: 'Kanan' },
-  { questionId: 'l3-009', level: 3, type: 'vocabulary', category: 'direction', question: '「左」のインドネシア語は？', options: ['Kanan', 'Depan', 'Kiri', 'Atas'], correctAnswer: 2, explanation: 'Kiri = 左。Depan = 前、Atas = 上、Bawah = 下。', indonesianWord: 'Kiri' },
-  { questionId: 'l3-010', level: 3, type: 'vocabulary', category: 'weather', question: '「雨」のインドネシア語は？', options: ['Panas', 'Dingin', 'Hujan', 'Angin'], correctAnswer: 2, explanation: 'Hujan = 雨。「Hujan deras = 大雨」。Panas = 暑い・熱い、Dingin = 寒い・冷たい。', indonesianWord: 'Hujan' },
-  { questionId: 'l3-011', level: 3, type: 'vocabulary', category: 'weather', question: '「暑い」のインドネシア語は？', options: ['Dingin', 'Hujan', 'Panas', 'Sejuk'], correctAnswer: 2, explanation: 'Panas = 暑い・熱い。Dingin = 寒い・冷たい。Sejuk = 涼しい。', indonesianWord: 'Panas' },
-  { questionId: 'l3-012', level: 3, type: 'vocabulary', category: 'feeling', question: '「嬉しい・楽しい」のインドネシア語は？', options: ['Sedih', 'Marah', 'Senang', 'Takut'], correctAnswer: 2, explanation: 'Senang = 嬉しい・楽しい・好き。Sedih = 悲しい、Marah = 怒る、Takut = 怖い。', indonesianWord: 'Senang' },
-  { questionId: 'l3-013', level: 3, type: 'vocabulary', category: 'activity', question: '「行く」のインドネシア語は？', options: ['Datang', 'Pulang', 'Pergi', 'Tinggal'], correctAnswer: 2, explanation: 'Pergi = 行く（その場を離れる）。Datang = 来る、Pulang = 帰る、Tinggal = 住む・残る。', indonesianWord: 'Pergi' },
-  { questionId: 'l3-014', level: 3, type: 'vocabulary', category: 'activity', question: '「見る・見える」のインドネシア語は？', options: ['Dengar', 'Lihat', 'Bicara', 'Pikir'], correctAnswer: 1, explanation: 'Lihat = 見る・見える。Dengar = 聞く・聞こえる。Bicara = 話す、Pikir = 考える。', indonesianWord: 'Lihat' },
-  { questionId: 'l3-015', level: 3, type: 'vocabulary', category: 'occupation', question: '「先生」のインドネシア語は？', options: ['Dokter', 'Polisi', 'Siswa', 'Guru'], correctAnswer: 3, explanation: 'Guru = 先生・教師。Dokter = 医者、Polisi = 警察官、Siswa = 生徒。', indonesianWord: 'Guru' },
-  { questionId: 'l3-016', level: 3, type: 'grammar', category: 'future', question: '「私は明日バリに行きます」のインドネシア語は？', options: ['Saya pergi Bali besok.', 'Saya akan pergi ke Bali besok.', 'Saya besok akan Bali pergi.', 'Besok Bali saya akan pergi.'], correctAnswer: 1, explanation: 'akan = 〜するつもり・〜だろう（未来を表す助動詞）。ke = 〜へ（方向）。「Saya akan pergi ke Bali besok.」' },
-  { questionId: 'l3-017', level: 3, type: 'grammar', category: 'past', question: '「私は昨日映画を見ました」のインドネシア語は？', options: ['Saya sudah nonton film kemarin.', 'Saya akan nonton film kemarin.', 'Saya nanti nonton film kemarin.', 'Saya sedang nonton film kemarin.'], correctAnswer: 0, explanation: 'sudah = 〜した（完了を表す副詞）。「Saya sudah nonton film kemarin.」。nonton = 見る（口語）。' },
-  { questionId: 'l3-018', level: 3, type: 'grammar', category: 'conjunction', question: '「〜と〜（並列）」のインドネシア語は？', options: ['Atau', 'Tetapi', 'Dan', 'Karena'], correctAnswer: 2, explanation: 'Dan = 〜と・そして（並列）。Atau = または、Tetapi/Tapi = しかし、Karena = なぜなら。' },
-  { questionId: 'l3-019', level: 3, type: 'grammar', category: 'imperative', question: '「〜してください」丁寧な依頼のインドネシア語は？', options: ['Tolong + 動詞', 'Tidak + 動詞', 'Bukan + 動詞', 'Sudah + 動詞'], correctAnswer: 0, explanation: 'Tolong = 〜してください・助けて。「Tolong bantu saya.（手伝ってください）」。' },
-  { questionId: 'l3-020', level: 3, type: 'grammar', category: 'quantity', question: '「多い」のインドネシア語は？', options: ['Sedikit', 'Banyak', 'Semua', 'Cukup'], correctAnswer: 1, explanation: 'Banyak = 多い・たくさん。Sedikit = 少ない・少し。Semua = すべて、Cukup = 十分。' },
-];
-
-// ============================================================
-// Level 4: ビジネス・中級語彙・接頭辞・接尾辞
-// ============================================================
-export const level4Questions: SeedQuestion[] = [
-  { questionId: 'l4-001', level: 4, type: 'vocabulary', category: 'business', question: '「会議」のインドネシア語は？', options: ['Kantor', 'Rapat', 'Proyek', 'Laporan'], correctAnswer: 1, explanation: 'Rapat = 会議・ミーティング。Kantor = オフィス、Proyek = プロジェクト、Laporan = レポート。', indonesianWord: 'Rapat' },
-  { questionId: 'l4-002', level: 4, type: 'vocabulary', category: 'business', question: '「申し込む・登録する」のインドネシア語は？', options: ['Mendaftar', 'Mengajukan', 'Membayar', 'Menerima'], correctAnswer: 0, explanation: 'Mendaftar = 申し込む・登録する（daftar = リスト、me-接頭辞で動詞化）。Membayar = 支払う。', indonesianWord: 'Mendaftar' },
-  { questionId: 'l4-003', level: 4, type: 'vocabulary', category: 'business', question: '「説明する」のインドネシア語は？', options: ['Menjelaskan', 'Membaca', 'Menulis', 'Mendengar'], correctAnswer: 0, explanation: 'Menjelaskan = 説明する（jelas = 明確な + me-/-kan で使役・他動詞化）。', indonesianWord: 'Menjelaskan' },
-  { questionId: 'l4-004', level: 4, type: 'vocabulary', category: 'prefix', question: '「me-」接頭辞の主な役割は？', options: ['名詞を形容詞にする', '動詞を否定する', '語根を能動他動詞にする', '語根を受動態にする'], correctAnswer: 2, explanation: 'me- 接頭辞は語根を能動他動詞（〜する）にする。例: baca(読む) → membaca。' },
-  { questionId: 'l4-005', level: 4, type: 'vocabulary', category: 'prefix', question: '「di-」接頭辞の主な役割は？', options: ['未来を表す', '受動態（〜される）を表す', '否定を表す', '複数形を表す'], correctAnswer: 1, explanation: 'di- 接頭辞は受動態「〜される」を表す。例: Buku itu dibaca saya.（その本は私に読まれた）。' },
-  { questionId: 'l4-006', level: 4, type: 'vocabulary', category: 'suffix', question: '「-an」接尾辞の主な役割は？', options: ['動詞を副詞にする', '動詞を名詞化する', '形容詞を強調する', '動詞を受動態にする'], correctAnswer: 1, explanation: '-an 接尾辞は動詞・形容詞から名詞を作る。例: makan(食べる) → makanan(食べ物)。' },
-  { questionId: 'l4-007', level: 4, type: 'vocabulary', category: 'health', question: '「頭痛」のインドネシア語は？', options: ['Sakit perut', 'Sakit kepala', 'Demam', 'Batuk'], correctAnswer: 1, explanation: 'Sakit kepala = 頭痛（sakit = 痛い・病気、kepala = 頭）。Sakit perut = 腹痛、Demam = 発熱、Batuk = 咳。', indonesianWord: 'Sakit kepala' },
-  { questionId: 'l4-008', level: 4, type: 'vocabulary', category: 'health', question: '「薬」のインドネシア語は？', options: ['Dokter', 'Rumah sakit', 'Obat', 'Perawat'], correctAnswer: 2, explanation: 'Obat = 薬。Dokter = 医者、Perawat = 看護師、Rumah sakit = 病院。', indonesianWord: 'Obat' },
-  { questionId: 'l4-009', level: 4, type: 'vocabulary', category: 'nature', question: '「海」のインドネシア語は？', options: ['Gunung', 'Sungai', 'Danau', 'Laut'], correctAnswer: 3, explanation: 'Laut = 海。Gunung = 山、Sungai = 川、Danau = 湖。', indonesianWord: 'Laut' },
-  { questionId: 'l4-010', level: 4, type: 'vocabulary', category: 'nature', question: '「島」のインドネシア語は？', options: ['Pantai', 'Pulau', 'Hutan', 'Lembah'], correctAnswer: 1, explanation: 'Pulau = 島。インドネシアは「千の島々」の国。Pantai = 浜辺、Hutan = 森林。', indonesianWord: 'Pulau' },
-  { questionId: 'l4-011', level: 4, type: 'vocabulary', category: 'economy', question: '「銀行」のインドネシア語は？', options: ['Toko', 'Pasar', 'Bank', 'ATM'], correctAnswer: 2, explanation: 'Bank = 銀行（英語と同じ）。ATM も同じ。Toko = 店、Pasar = 市場。', indonesianWord: 'Bank' },
-  { questionId: 'l4-012', level: 4, type: 'vocabulary', category: 'economy', question: '「両替する」のインドネシア語は？', options: ['Membeli', 'Membayar', 'Menukar', 'Menjual'], correctAnswer: 2, explanation: 'Menukar = 両替する・交換する（tukar = 交換）。Membeli = 買う、Menjual = 売る。', indonesianWord: 'Menukar' },
-  { questionId: 'l4-013', level: 4, type: 'vocabulary', category: 'communication', question: '「電話する」のインドネシア語は？', options: ['Menelepon', 'Menulis', 'Membaca', 'Bertemu'], correctAnswer: 0, explanation: 'Menelepon = 電話する（telepon = 電話、me-接頭辞）。Bertemu = 会う。', indonesianWord: 'Menelepon' },
-  { questionId: 'l4-014', level: 4, type: 'vocabulary', category: 'education', question: '「大学」のインドネシア語は？', options: ['Sekolah', 'SMA', 'Universitas', 'SD'], correctAnswer: 2, explanation: 'Universitas = 大学。SD = 小学校（Sekolah Dasar）、SMP = 中学校、SMA = 高校。', indonesianWord: 'Universitas' },
-  { questionId: 'l4-015', level: 4, type: 'vocabulary', category: 'transport', question: '「飛行機」のインドネシア語は？', options: ['Kapal', 'Kereta', 'Pesawat', 'Bus'], correctAnswer: 2, explanation: 'Pesawat（terbang）= 飛行機（terbang = 飛ぶ）。Kapal = 船、Kereta = 列車。', indonesianWord: 'Pesawat' },
-  { questionId: 'l4-016', level: 4, type: 'grammar', category: 'passive', question: '「その本は読まれています」（受動態）のインドネシア語は？', options: ['Buku itu membaca.', 'Buku itu dibaca.', 'Buku itu akan membaca.', 'Buku itu sudah membaca.'], correctAnswer: 1, explanation: '受動態は「di- + 語根」で表す。「Buku itu dibaca.」= その本は読まれている。' },
-  { questionId: 'l4-017', level: 4, type: 'grammar', category: 'relative', question: '「〜している（現在進行）」を表す語は？', options: ['Sudah', 'Akan', 'Sedang', 'Belum'], correctAnswer: 2, explanation: 'Sedang = 〜している（進行中）。Sudah = 〜した（完了）、Akan = 〜するつもり（未来）、Belum = まだ〜していない。' },
-  { questionId: 'l4-018', level: 4, type: 'grammar', category: 'comparison', question: '「〜より〜の方が…だ」比較を表す構文は？', options: ['A lebih ... daripada B', 'A lebih ... dengan B', 'A paling ... daripada B', 'A sangat ... daripada B'], correctAnswer: 0, explanation: '比較は「A lebih [形容詞] daripada B（AはBより〜だ）」。例: Ini lebih mahal daripada itu.（これはあれより高い）' },
-  { questionId: 'l4-019', level: 4, type: 'grammar', category: 'superlative', question: '最上級「最も〜」を表す語は？', options: ['Lebih', 'Sangat', 'Paling', 'Cukup'], correctAnswer: 2, explanation: 'Paling = 最も〜（最上級）。「Ini paling mahal.（これが最も高い）」。Sangat = とても（強調）。' },
-  { questionId: 'l4-020', level: 4, type: 'grammar', category: 'conditional', question: '「もし〜なら」を表すインドネシア語は？', options: ['Karena', 'Kalau / Jika', 'Tetapi', 'Atau'], correctAnswer: 1, explanation: 'Kalau / Jika = もし〜なら（条件節）。「Kalau hujan, saya tidak pergi.（雨なら行かない）」' },
-];
-
-// ============================================================
-// Level 5: 検定レベル・複合語・慣用表現
-// ============================================================
-export const level5Questions: SeedQuestion[] = [
-  { questionId: 'l5-001', level: 5, type: 'vocabulary', category: 'culture', question: '「バティック（インドネシアの伝統染め物）」のインドネシア語は？', options: ['Sarung', 'Kebaya', 'Batik', 'Songket'], correctAnswer: 2, explanation: 'Batik = バティック（ろうけつ染めの伝統布）。UNESCOの無形文化遺産。Kebaya = 民族衣装のブラウス。', indonesianWord: 'Batik' },
-  { questionId: 'l5-002', level: 5, type: 'vocabulary', category: 'culture', question: '「ガムラン（伝統打楽器アンサンブル）」のインドネシア語は？', options: ['Dangdut', 'Gamelan', 'Wayang', 'Kecak'], correctAnswer: 1, explanation: 'Gamelan = ガムラン（ジャワ・バリの伝統音楽アンサンブル）。Wayang = 影絵芝居。', indonesianWord: 'Gamelan' },
-  { questionId: 'l5-003', level: 5, type: 'vocabulary', category: 'idiom', question: '「Makan angin」の慣用的な意味は？', options: ['とても空腹である', 'ドライブ・散歩をする', 'お金を無駄にする', '嘘をつく'], correctAnswer: 1, explanation: 'Makan angin（直訳: 風を食べる）= ドライブ・散歩・気分転換の外出。慣用表現として使う。', indonesianWord: 'Makan angin' },
-  { questionId: 'l5-004', level: 5, type: 'vocabulary', category: 'idiom', question: '「Cuci mata」の慣用的な意味は？', options: ['目を洗う', 'ウィンドウショッピング・目の保養', '眼科に行く', '泣く'], correctAnswer: 1, explanation: 'Cuci mata（直訳: 目を洗う）= ウィンドウショッピング・見て楽しむ。Cuci = 洗う、mata = 目。', indonesianWord: 'Cuci mata' },
-  { questionId: 'l5-005', level: 5, type: 'vocabulary', category: 'compound', question: '「Rumah sakit」の正しい意味は？', options: ['病気の人', '病院', '薬局', '診療所'], correctAnswer: 1, explanation: 'Rumah sakit = 病院（直訳: 病気の家）。rumah = 家、sakit = 病気・痛い。', indonesianWord: 'Rumah sakit' },
-  { questionId: 'l5-006', level: 5, type: 'vocabulary', category: 'compound', question: '「Kamar mandi」の正しい意味は？', options: ['寝室', 'お風呂・バスルーム', 'リビング', 'ダイニング'], correctAnswer: 1, explanation: 'Kamar mandi = お風呂・バスルーム（直訳: 入浴の部屋）。kamar = 部屋、mandi = 入浴する。', indonesianWord: 'Kamar mandi' },
-  { questionId: 'l5-007', level: 5, type: 'vocabulary', category: 'economy', question: '「輸出する」のインドネシア語は？', options: ['Mengimpor', 'Mengekspor', 'Menjual', 'Membeli'], correctAnswer: 1, explanation: 'Mengekspor = 輸出する（ekspor = 輸出）。Mengimpor = 輸入する（impor = 輸入）。', indonesianWord: 'Mengekspor' },
-  { questionId: 'l5-008', level: 5, type: 'vocabulary', category: 'politics', question: '「大統領」のインドネシア語は？', options: ['Menteri', 'Gubernur', 'Presiden', 'Walikota'], correctAnswer: 2, explanation: 'Presiden = 大統領。Menteri = 大臣、Gubernur = 州知事、Walikota = 市長。', indonesianWord: 'Presiden' },
-  { questionId: 'l5-009', level: 5, type: 'vocabulary', category: 'abstract', question: '「自由・独立」のインドネシア語は？', options: ['Persatuan', 'Keadilan', 'Kemerdekaan', 'Keamanan'], correctAnswer: 2, explanation: 'Kemerdekaan = 自由・独立（merdeka = 自由な + ke-/-an で名詞化）。インドネシア独立記念日（17 Agustus）の核心語。', indonesianWord: 'Kemerdekaan' },
-  { questionId: 'l5-010', level: 5, type: 'vocabulary', category: 'abstract', question: '「パンカシラ（インドネシアの建国五原則）」の「パンカ（Panca）」の意味は？', options: ['三', '四', '五', '六'], correctAnswer: 2, explanation: 'Panca = 五（サンスクリット語由来）。Sila = 原則。Pancasila = 五原則。', indonesianWord: 'Panca' },
-  { questionId: 'l5-011', level: 5, type: 'vocabulary', category: 'formal', question: '「〜によれば・〜に従って」のフォーマルな表現は？', options: ['Karena', 'Menurut', 'Meskipun', 'Sehingga'], correctAnswer: 1, explanation: 'Menurut = 〜によれば・〜に従って。「Menurut saya（私によれば）」でよく使う。', indonesianWord: 'Menurut' },
-  { questionId: 'l5-012', level: 5, type: 'vocabulary', category: 'formal', question: '「〜にもかかわらず」を表す接続詞は？', options: ['Karena', 'Sehingga', 'Meskipun', 'Kalau'], correctAnswer: 2, explanation: 'Meskipun / Walaupun = 〜にもかかわらず・〜だけど（逆接）。「Meskipun hujan, dia tetap pergi.」', indonesianWord: 'Meskipun' },
-  { questionId: 'l5-013', level: 5, type: 'grammar', category: 'passive-personal', question: '「私がその本を読みます（主語強調の受動）」のインドネシア語は？', options: ['Buku itu dibaca oleh saya.', 'Saya membaca buku itu.', 'Buku itu saya baca.', 'Saya baca buku itu.'], correctAnswer: 2, explanation: '「Buku itu saya baca.」は主語強調の受動態（di-受動と意味は同じだが主語を前に出す）。よりフォーマルな表現。' },
-  { questionId: 'l5-014', level: 5, type: 'grammar', category: 'ber-prefix', question: '「ber-」接頭辞の主な役割は？', options: ['他動詞（〜する）を作る', '自動詞・状態動詞（〜している・〜をもつ）を作る', '受動態を作る', '名詞を形容詞にする'], correctAnswer: 1, explanation: 'ber- 接頭辞は自動詞・状態動詞を作る。例: kerja(仕事) → bekerja(働く)、bicara → berbicara(話す)。' },
-  { questionId: 'l5-015', level: 5, type: 'grammar', category: 'ke-an', question: '「ke-/-an」接辞の主な役割は？', options: ['動詞の受動態を作る', '抽象名詞（〜性・〜さ）を作る', '動詞の進行形を作る', '形容詞の比較級を作る'], correctAnswer: 1, explanation: 'ke-/-an は抽象名詞化。例: merdeka(自由な) → kemerdekaan(自由・独立)、indah(美しい) → keindahan(美しさ)。' },
-  { questionId: 'l5-016', level: 5, type: 'grammar', category: 'reduplication', question: 'インドネシア語の重複形（例: anak-anak）の主な用法は？', options: ['強調', '複数形・種々の〜', '縮小形', '否定'], correctAnswer: 1, explanation: '重複形は複数・多様性を表す。anak(子供) → anak-anak(子供たち)。buah(果物) → buah-buahan(果物類)。' },
-  { questionId: 'l5-017', level: 5, type: 'vocabulary', category: 'loanword', question: '「Komputer」はどの言語からの借用語？', options: ['オランダ語', '英語', 'アラビア語', 'サンスクリット語'], correctAnswer: 1, explanation: 'Komputer = computer（英語由来）。インドネシア語には英語・オランダ語・アラビア語・サンスクリット語など多くの借用語がある。', indonesianWord: 'Komputer' },
-  { questionId: 'l5-018', level: 5, type: 'vocabulary', category: 'loanword', question: '「Gratis（無料の）」はどの言語からの借用語？', options: ['英語', 'アラビア語', 'オランダ語', 'ポルトガル語'], correctAnswer: 2, explanation: 'Gratis はオランダ語由来（gratis = 無料）。インドネシアはオランダに約350年植民地化されたため、多くのオランダ語が残っている。', indonesianWord: 'Gratis' },
-  { questionId: 'l5-019', level: 5, type: 'vocabulary', category: 'loanword', question: '「Masjid（モスク）」はどの言語からの借用語？', options: ['英語', 'オランダ語', 'サンスクリット語', 'アラビア語'], correctAnswer: 3, explanation: 'Masjid = モスク（アラビア語 masjid 由来）。インドネシアは世界最大のムスリム人口を持ち、アラビア語由来の語も多い。', indonesianWord: 'Masjid' },
-  { questionId: 'l5-020', level: 5, type: 'grammar', category: 'discourse', question: '「Adapun」の文章内での役割は？', options: ['強い否定を表す', '話題を転換・導入するフォーマルな接続詞', '疑問を強調する', '時間の経過を示す'], correctAnswer: 1, explanation: 'Adapun = さて・ところで（フォーマルな話題転換・導入）。公文書・ニュースでよく使われる。', indonesianWord: 'Adapun' },
-];
-
-// ============================================================
 // 全レベルのデータをエクスポート
-// ============================================================
 export const allSeedData: Record<number, SeedQuestion[]> = {
   1: level1Questions,
   2: level2Questions,
