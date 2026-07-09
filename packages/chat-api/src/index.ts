@@ -1,6 +1,7 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { handleChat } from './handlers/chat';
 import { handleGetScenarios } from './handlers/scenarios';
+import { handleEvaluate } from './handlers/evaluate';
 import { preflight, ok } from './utils/response';
 
 /**
@@ -23,6 +24,10 @@ export const handler = async (
   // ルーティング
   if (method === 'POST' && path === '/chat') {
     return handleChat(event);
+  }
+
+  if (method === 'POST' && path === '/chat/evaluate') {
+    return handleEvaluate(event);
   }
 
   if (method === 'GET' && path === '/chat/scenarios') {
