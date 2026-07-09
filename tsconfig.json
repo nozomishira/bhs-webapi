@@ -2,6 +2,7 @@
   "files": [],
   "references": [
     { "path": "packages/shared" },
-    { "path": "packages/quiz-api" }
+    { "path": "packages/quiz-api" },
+    { "path": "packages/chat-api" }
   ]
 }

@@ -1,4 +1,4 @@
-name: Deploy quiz-api (dev)
+name: Deploy quiz-api + chat-api (dev)
 
 on:
   push:
@@ -7,18 +7,17 @@ on:
     paths:
       - 'packages/shared/**'
       - 'packages/quiz-api/**'
+      - 'packages/chat-api/**'
       - 'package.json'
       - 'tsconfig.json'
       - '.github/workflows/deploy-dev.yml'
 
 jobs:
-  deploy:
+  deploy-quiz-api:
     runs-on: ubuntu-latest
-
     permissions:
       id-token: write
       contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -32,9 +31,9 @@ jobs:
         run: npm install
 
       - name: Build shared + quiz-api
-        run: npm run build
+        run: npm run build:quiz-api
 
-      - name: Package quiz-api for Lambda
+      - name: Package quiz-api
         working-directory: packages/quiz-api
         run: |
           mkdir -p deploy
@@ -42,7 +41,6 @@ jobs:
           cp -r ../../node_modules deploy/
           cd deploy && zip -r ../function.zip . && cd ..
           rm -rf deploy
-          echo "function.zip size: $(du -h function.zip | cut -f1)"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -50,7 +48,7 @@ jobs:
           role-to-assume: arn:aws:iam::459532536546:role/dev-apne1-github-actions-webapi-role
           aws-region: ap-northeast-1
 
-      - name: Get Lambda function name
+      - name: Get quiz-api Lambda function name
         id: cfn-outputs
         run: |
           FUNCTION_NAME=$(aws cloudformation describe-stacks \
@@ -58,34 +56,75 @@ jobs:
             --region ap-northeast-1 \
             --query "Stacks[0].Outputs[?OutputKey=='QuizApiFunctionName'].OutputValue" \
             --output text)
-
-          if [ -z "$FUNCTION_NAME" ] || [ "$FUNCTION_NAME" == "None" ]; then
-            echo "::error::QuizApiFunctionName not found in stack outputs."
-            exit 1
-          fi
-
           echo "function_name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
-          echo "Lambda function: $FUNCTION_NAME"
 
-      - name: Deploy to Lambda
+      - name: Deploy quiz-api
         run: |
           aws lambda update-function-code \
             --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
             --zip-file fileb://packages/quiz-api/function.zip \
             --region ap-northeast-1
 
-      - name: Wait for Lambda update
+      - name: Wait for quiz-api update
         run: |
           aws lambda wait function-updated \
             --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
             --region ap-northeast-1
 
-      - name: Verify deployment
+  deploy-chat-api:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build shared + chat-api
+        run: npm run build:chat-api
+
+      - name: Package chat-api
+        working-directory: packages/chat-api
         run: |
-          echo "Deployment complete. Testing health endpoint..."
-          API_ENDPOINT=$(aws cloudformation describe-stacks \
+          mkdir -p deploy
+          cp -r dist/* deploy/
+          cp -r ../../node_modules deploy/
+          cd deploy && zip -r ../function.zip . && cd ..
+          rm -rf deploy
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::459532536546:role/dev-apne1-github-actions-webapi-role
+          aws-region: ap-northeast-1
+
+      - name: Get chat-api Lambda function name
+        id: cfn-outputs
+        run: |
+          FUNCTION_NAME=$(aws cloudformation describe-stacks \
             --stack-name dev-bhs-indonesia-webapi \
             --region ap-northeast-1 \
-            --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+            --query "Stacks[0].Outputs[?OutputKey=='ChatApiFunctionName'].OutputValue" \
             --output text)
-          curl -s "$API_ENDPOINT/health" | jq .
+          echo "function_name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy chat-api
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --zip-file fileb://packages/chat-api/function.zip \
+            --region ap-northeast-1
+
+      - name: Wait for chat-api update
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --region ap-northeast-1
