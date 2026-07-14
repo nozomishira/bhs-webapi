@@ -3,6 +3,7 @@ import { handleHealth } from './handlers/health';
 import { handleGetLevels } from './handlers/levels';
 import { handleGetQuestions } from './handlers/questions';
 import { handlePostSession } from './handlers/sessions';
+import { handleGetProfile, handlePutProfile } from './handlers/profile';
 import { preflight, notFound } from './utils/response';
 
 /**
@@ -40,6 +41,14 @@ export const handler = async (
 
   if (method === 'POST' && path === '/sessions') {
     return handlePostSession(event);
+  }
+
+  if (method === 'GET' && path === '/profile') {
+    return handleGetProfile(event);
+  }
+
+  if (method === 'PUT' && path === '/profile') {
+    return handlePutProfile(event);
   }
 
   return notFound(`ルートが見つかりません: [${method}] ${path}`);
