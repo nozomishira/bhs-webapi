@@ -107,8 +107,8 @@ export async function handlePutProfile(
 
   // バリデーション
   if (body.displayName !== undefined) {
-    if (typeof body.displayName !== 'string' || body.displayName.trim().length === 0 || body.displayName.length > 30) {
-      return badRequest('displayName は1〜30文字で指定してください');
+    if (typeof body.displayName !== 'string' || body.displayName.trim().length === 0 || body.displayName.length > 15) {
+      return badRequest('displayName は1〜15文字で指定してください');
     }
   }
   if (body.gender !== undefined && !VALID_GENDERS.includes(body.gender)) {
