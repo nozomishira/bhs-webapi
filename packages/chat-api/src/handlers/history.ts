@@ -29,6 +29,7 @@ interface SaveHistoryRequest {
   scenarioName: string;
   messages: { role: string; content: string }[];
   evaluation?: Record<string, unknown>;
+  sessionId?: string;  // 再開時: 同じ sessionId で上書き
 }
 
 export async function handleSaveHistory(
@@ -46,21 +47,42 @@ export async function handleSaveHistory(
     return badRequest('リクエストボディが不正な JSON です');
   }
 
-  const { scenarioId, scenarioName, messages, evaluation } = body;
+  const { scenarioId, scenarioName, messages, evaluation, sessionId: existingSessionId } = body;
 
   if (!scenarioId || !messages || !Array.isArray(messages) || messages.length === 0) {
     return badRequest('scenarioId と messages は必須です');
   }
 
-  const sessionId = uuidv4();
+  const sessionId = existingSessionId ?? uuidv4();
   const now = new Date().toISOString();
 
   try {
+    let sk: string;
+
+    if (existingSessionId) {
+      // 既存セッションの SK を検索して上書き
+      const existing = await ddb.send(new QueryCommand({
+        TableName: TABLE,
+        KeyConditionExpression: 'pk = :pk AND begins_with(sk, :skPrefix)',
+        FilterExpression: 'sessionId = :sid',
+        ExpressionAttributeValues: {
+          ':pk': `USER#${userId}`,
+          ':skPrefix': 'SESSION#',
+          ':sid': existingSessionId,
+        },
+        ProjectionExpression: 'sk',
+        Limit: 1,
+      }));
+      sk = existing.Items?.[0]?.sk ?? `SESSION#${now}#${sessionId}`;
+    } else {
+      sk = `SESSION#${now}#${sessionId}`;
+    }
+
     await ddb.send(new PutCommand({
       TableName: TABLE,
       Item: {
         pk: `USER#${userId}`,
-        sk: `SESSION#${now}#${sessionId}`,
+        sk,
         sessionId,
         userId,
         scenarioId,
@@ -68,7 +90,8 @@ export async function handleSaveHistory(
         messages,
         evaluation: evaluation ?? null,
         messageCount: messages.length,
-        createdAt: now,
+        createdAt: existingSessionId ? (sk.split('#')[1] ?? now) : now,
+        updatedAt: now,
         ttl: ttlIn90Days(),
       },
     }));
