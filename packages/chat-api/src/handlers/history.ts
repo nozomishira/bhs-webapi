@@ -71,7 +71,6 @@ export async function handleSaveHistory(
           ':sid': existingSessionId,
         },
         ProjectionExpression: 'sk',
-        Limit: 1,
       }));
       sk = existing.Items?.[0]?.sk ?? `SESSION#${now}#${sessionId}`;
     } else {
