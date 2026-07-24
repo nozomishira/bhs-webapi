@@ -1,17 +1,7 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-import {
-  BedrockRuntimeClient,
-  InvokeModelCommand,
-} from '@aws-sdk/client-bedrock-runtime';
 import { getScenario, SCENARIO_IDS } from '../scenarios';
 import { ok, badRequest, internalError } from '../utils/response';
-
-const bedrockClient = new BedrockRuntimeClient({
-  region: process.env.BEDROCK_REGION ?? 'ap-northeast-1',
-});
-
-const MODEL_ID = process.env.BEDROCK_MODEL_ID ?? 'jp.anthropic.claude-haiku-4-5-20251001-v1:0';
-const MAX_TOKENS = 500;
+import { invokeGateway } from '../gateway';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -58,44 +48,23 @@ export async function handleChat(
   // 会話履歴の上限（コスト制御: 最新20往復まで）
   const trimmedMessages = messages.slice(-40);
 
-  // シナリオのシステムプロンプトを取得
+  // シナリオの場面設定を取得
   const scenario = getScenario(scenarioId)!;
 
-  // Bedrock API 呼び出し
+  // 場面設定を最初の user メッセージとして含める
+  // Harness は共通のシステムプロンプトを持っているので、場面設定だけ追加
+  const sceneInstruction = `【場面設定】${scenario.name}: ${scenario.description}`;
+
+  // Gateway 経由で Harness を呼び出し
   try {
-    const bedrockBody = JSON.stringify({
-      anthropic_version: 'bedrock-2023-05-31',
-      max_tokens: MAX_TOKENS,
-      system: scenario.systemPrompt,
-      messages: trimmedMessages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      })),
-    });
-
-    const command = new InvokeModelCommand({
-      modelId: MODEL_ID,
-      contentType: 'application/json',
-      accept: 'application/json',
-      body: new TextEncoder().encode(bedrockBody),
-    });
-
-    const response = await bedrockClient.send(command);
-    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-
-    // Claude のレスポンスからテキストを抽出
-    const assistantMessage = responseBody.content?.[0]?.text ?? '';
+    const result = await invokeGateway(sceneInstruction, trimmedMessages);
 
     return ok({
-      reply: assistantMessage,
+      reply: result.message,
       scenarioId,
-      usage: {
-        inputTokens: responseBody.usage?.input_tokens ?? 0,
-        outputTokens: responseBody.usage?.output_tokens ?? 0,
-      },
     });
   } catch (err: unknown) {
-    console.error('Bedrock invocation error:', err);
+    console.error('Gateway invocation error:', err);
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
     return internalError(`AI の応答に失敗しました: ${errorMessage}`);
   }

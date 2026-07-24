@@ -9,9 +9,13 @@
     "package": "npm run build:clean && cp -r node_modules dist/ && cd dist && zip -r ../function.zip . && cd .."
   },
   "dependencies": {
+    "@aws-crypto/sha256-js": "^5.2.0",
     "@aws-sdk/client-bedrock-runtime": "^3.700.0",
     "@aws-sdk/client-dynamodb": "^3.700.0",
+    "@aws-sdk/credential-provider-node": "^3.700.0",
     "@aws-sdk/lib-dynamodb": "^3.700.0",
+    "@smithy/protocol-http": "^4.1.0",
+    "@smithy/signature-v4": "^4.2.0",
     "@bhs/shared": "*",
     "uuid": "^11.1.0"
   },
