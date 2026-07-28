@@ -30,7 +30,7 @@ export async function invokeGateway(
   }
 
   const prompt = buildPrompt(sceneInstruction, messages);
-  const body = JSON.stringify({ input: { message: prompt } });
+  const body = JSON.stringify({ message: prompt });
   const url = new URL(`${GATEWAY_URL}/${TARGET_NAME}/invocations`);
 
   // aws4 で SigV4 署名（Lambda 環境変数の認証情報を自動取得）
