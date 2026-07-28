@@ -77,9 +77,17 @@ export async function handleChat(
   const scenario = getScenario(scenarioId)!;
   const sceneInstruction = `【場面設定】${scenario.name}: ${scenario.description}`;
 
+  // 場面設定を最初の user メッセージの前に付加
+  const messagesWithScene = trimmedMessages.map((m, i) => {
+    if (i === 0 && m.role === 'user') {
+      return { ...m, content: `${sceneInstruction}\n\n${m.content}` };
+    }
+    return m;
+  });
+
   // Harness 呼び出し
   try {
-    const result = await invokeGateway(sceneInstruction, trimmedMessages);
+    const result = await invokeGateway(sceneInstruction, messagesWithScene);
 
     return ok({
       reply: result.message,

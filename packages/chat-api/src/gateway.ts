@@ -22,7 +22,7 @@ interface GatewayResponse {
  * InvokeHarness API で Harness を呼び出す
  */
 export async function invokeGateway(
-  sceneInstruction: string,
+  _sceneInstruction: string,
   messages: ChatMessage[]
 ): Promise<GatewayResponse> {
   if (!HARNESS_ARN) {
@@ -34,7 +34,6 @@ export async function invokeGateway(
       role: m.role,
       content: [{ text: m.content }],
     })),
-    systemPrompt: [{ text: sceneInstruction }],
   });
 
   const harnessArnEncoded = encodeURIComponent(HARNESS_ARN);
