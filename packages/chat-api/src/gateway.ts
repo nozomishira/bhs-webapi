@@ -2,8 +2,7 @@
  * AgentCore Harness を直接呼び出すモジュール
  *
  * InvokeHarness API: POST /harnesses/invoke?harnessArn=...
- * エンドポイント: https://bedrock-agentcore.{region}.amazonaws.com
- * 認証: IAM (SigV4) — aws4 で署名
+ * レスポンスはストリーミング（event-stream）形式で返される
  */
 import * as aws4 from 'aws4';
 
@@ -30,8 +29,6 @@ export async function invokeGateway(
     throw new Error('HARNESS_ARN environment variable is not set');
   }
 
-  // InvokeHarness のリクエストボディ
-  // 場面設定をシステムプロンプトのオーバーライドとして渡す
   const body = JSON.stringify({
     messages: messages.map((m) => ({
       role: m.role,
@@ -43,8 +40,7 @@ export async function invokeGateway(
   const harnessArnEncoded = encodeURIComponent(HARNESS_ARN);
   const path = `/harnesses/invoke?harnessArn=${harnessArnEncoded}`;
 
-  // セッション ID が必要（同じ ID を使えば会話が継続される）
-  // 33文字以上、パターン [a-zA-Z0-9][a-zA-Z0-9-_]*
+  // 33文字以上必須
   const sessionId = `bhs${Date.now()}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
   const signed = aws4.sign(
@@ -80,23 +76,52 @@ export async function invokeGateway(
     throw new Error(`Harness returned ${response.status}: ${errorText}`);
   }
 
+  // ストリーミングレスポンスをパース
+  // レスポンスは event-stream 形式: 各イベントに contentBlockDelta.delta.text が含まれる
   const responseText = await response.text();
+  const message = parseStreamingResponse(responseText);
 
-  try {
-    const parsed = JSON.parse(responseText);
-    // InvokeHarness のレスポンスから assistant メッセージを抽出
-    const output = parsed.output ?? parsed;
-    if (output.message?.content?.[0]?.text) {
-      return { message: output.message.content[0].text };
-    }
-    if (output.messages) {
-      const last = output.messages[output.messages.length - 1];
-      if (last?.content?.[0]?.text) {
-        return { message: last.content[0].text };
-      }
-    }
-    return { message: responseText };
-  } catch {
-    return { message: responseText };
+  return { message };
+}
+
+/**
+ * InvokeHarness のストリーミングレスポンスから text を抽出して結合する
+ *
+ * 形式: event-type + JSON の繰り返し
+ * contentBlockDelta イベントの delta.text を集める
+ */
+function parseStreamingResponse(raw: string): string {
+  const textParts: string[] = [];
+
+  // JSON オブジェクトを正規表現で抽出
+  const jsonPattern = /\{"contentBlockIndex":\d+,"delta":\{"text":"((?:[^"\\]|\\.)*)"\}\}/g;
+  let match;
+
+  while ((match = jsonPattern.exec(raw)) !== null) {
+    // エスケープされた文字を復元
+    const text = match[1]
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\"/g, '"')
+      .replace(/\\\\/g, '\\');
+    textParts.push(text);
   }
+
+  if (textParts.length > 0) {
+    return textParts.join('');
+  }
+
+  // フォールバック: delta.text パターンが見つからない場合
+  // "text":"..." を全て抽出
+  const fallbackPattern = /"text":"((?:[^"\\]|\\.)*)"/g;
+  while ((match = fallbackPattern.exec(raw)) !== null) {
+    const text = match[1]
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\"/g, '"')
+      .replace(/\\\\/g, '\\');
+    textParts.push(text);
+  }
+
+  return textParts.length > 0 ? textParts.join('') : raw;
 }
