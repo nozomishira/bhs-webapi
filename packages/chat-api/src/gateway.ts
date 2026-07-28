@@ -44,7 +44,8 @@ export async function invokeGateway(
   const path = `/harnesses/invoke?harnessArn=${harnessArnEncoded}`;
 
   // セッション ID が必要（同じ ID を使えば会話が継続される）
-  const sessionId = `session-${Date.now()}`;
+  // 33文字以上必須。UUID v4 をハイフンなしで使用（32文字 + prefix = 36文字以上）
+  const sessionId = `bhs-${Date.now()}-${Math.random().toString(36).slice(2, 15)}`;
 
   const signed = aws4.sign(
     {
