@@ -43,6 +43,9 @@ export async function invokeGateway(
   const harnessArnEncoded = encodeURIComponent(HARNESS_ARN);
   const path = `/harnesses/invoke?harnessArn=${harnessArnEncoded}`;
 
+  // セッション ID が必要（同じ ID を使えば会話が継続される）
+  const sessionId = `session-${Date.now()}`;
+
   const signed = aws4.sign(
     {
       service: 'bedrock-agentcore',
@@ -50,7 +53,10 @@ export async function invokeGateway(
       method: 'POST',
       host: `bedrock-agentcore.${REGION}.amazonaws.com`,
       path,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Amzn-Bedrock-AgentCore-Runtime-Session-Id': sessionId,
+      },
       body,
     },
     {
