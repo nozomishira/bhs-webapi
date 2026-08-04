@@ -41,6 +41,7 @@ export interface QuizSessionRecord {
   pk: string;           // "SESSION#<uuid>"
   sk: string;           // "METADATA"
   sessionId: string;
+  userId?: string;      // "USER#<cognitoSub>" (認証済みの場合)
   level: number;
   questionCount: number;
   score: number;

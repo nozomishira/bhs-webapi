@@ -12,7 +12,7 @@ function ttlIn90Days(): number {
   return Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60;
 }
 
-export async function saveSession(req: SaveSessionRequest): Promise<QuizSessionRecord> {
+export async function saveSession(req: SaveSessionRequest, userId?: string): Promise<QuizSessionRecord> {
   const sessionId = uuidv4();
   const now = new Date().toISOString();
 
@@ -20,6 +20,7 @@ export async function saveSession(req: SaveSessionRequest): Promise<QuizSessionR
     pk: `SESSION#${sessionId}`,
     sk: 'METADATA',
     sessionId,
+    ...(userId && { userId: `USER#${userId}` }),
     level: req.level,
     questionCount: req.questionCount,
     score: req.score,

@@ -36,8 +36,13 @@ export async function handlePostSession(
     return badRequest(`courseType は ${VALID_COURSE_TYPES.join('/')} のいずれかを指定してください`);
   }
 
+  // JWT から userId を取得（認証済みの場合）
+  const claims = (event.requestContext as unknown as { authorizer?: { jwt?: { claims?: Record<string, string> } } })
+    ?.authorizer?.jwt?.claims;
+  const userId = claims?.sub;
+
   try {
-    const session = await saveSession({ level, questionCount, score, totalQuestions, courseType });
+    const session = await saveSession({ level, questionCount, score, totalQuestions, courseType }, userId);
     return created({ sessionId: session.sessionId, createdAt: session.createdAt });
   } catch (err) {
     console.error('handlePostSession error:', err);
