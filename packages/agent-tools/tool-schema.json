@@ -1,0 +1,66 @@
+[
+  {
+    "name": "get_chat_history",
+    "description": "ユーザーのインドネシア語チャット会話履歴と採点結果を取得します。直近の会話セッション一覧（場面、スコア、日付）を返します。",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ユーザーの Cognito sub ID"
+        },
+        "limit": {
+          "type": "number",
+          "description": "取得する最大件数（デフォルト: 10）"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  {
+    "name": "get_quiz_history",
+    "description": "ユーザーのクイズ結果を時系列で取得します。レベル、コースタイプ（語彙/文法/読解/検定）、正答数を含みます。",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ユーザーの Cognito sub ID"
+        },
+        "limit": {
+          "type": "number",
+          "description": "取得する最大件数（デフォルト: 20）"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  {
+    "name": "get_weak_areas",
+    "description": "ユーザーの苦手分野を分析して返します。クイズの正答率とチャット採点結果から、改善が必要な分野を特定します。",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ユーザーの Cognito sub ID"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  {
+    "name": "get_user_profile",
+    "description": "ユーザーのプロフィール情報（表示名、性別、自己紹介）を取得します。",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ユーザーの Cognito sub ID"
+        }
+      },
+      "required": ["userId"]
+    }
+  }
+]
