@@ -170,7 +170,7 @@ export async function handleGetHistoryDetail(
       },
     }));
 
-    const item = (result as { Items?: Record<string, unknown>[] }).Items?.[0];
+    const item = result.Items?.[0];
     if (!item) {
       return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: false, error: '履歴が見つかりません' }) };
     }
