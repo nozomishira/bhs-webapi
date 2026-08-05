@@ -34,9 +34,11 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
   // POST /coach
   if (method === 'POST' && path === '/coach') {
     const result = await handleCoach(event);
-    // CORS ヘッダーを追加
-    const headers = { ...corsHeaders(), ...(result.headers as Record<string, string> ?? {}) };
-    return { ...result, headers };
+    if (typeof result === 'string') return result;
+    return {
+      ...result,
+      headers: { ...corsHeaders(), ...(result.headers ?? {}) },
+    };
   }
 
   return {
