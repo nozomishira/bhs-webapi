@@ -7,11 +7,15 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api && npm run build --workspace=packages/chat-api",
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api && npm run build --workspace=packages/chat-api && npm run build --workspace=packages/coach-api && npm run build --workspace=packages/agent-tools",
     "build:quiz-api": "npm run build --workspace=packages/shared && npm run build --workspace=packages/quiz-api",
     "build:chat-api": "npm run build --workspace=packages/shared && npm run build --workspace=packages/chat-api",
+    "build:coach-api": "npm run build --workspace=packages/shared && npm run build --workspace=packages/coach-api",
+    "build:agent-tools": "npm run build --workspace=packages/shared && npm run build --workspace=packages/agent-tools",
     "package:quiz-api": "npm run build --workspace=packages/shared && npm run package --workspace=packages/quiz-api",
     "package:chat-api": "npm run build --workspace=packages/shared && npm run package --workspace=packages/chat-api",
+    "package:coach-api": "npm run build --workspace=packages/shared && npm run package --workspace=packages/coach-api",
+    "package:agent-tools": "npm run build --workspace=packages/shared && npm run package --workspace=packages/agent-tools",
     "seed:dev": "ENV=dev npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
     "seed:test": "ENV=test npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts",
     "seed:prod": "ENV=prod npx ts-node --project packages/quiz-api/scripts/tsconfig.json packages/quiz-api/scripts/seed.ts"

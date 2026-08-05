@@ -1,4 +1,4 @@
-name: Deploy quiz-api + chat-api (dev)
+name: Deploy all APIs (dev)
 
 on:
   push:
@@ -8,6 +8,8 @@ on:
       - 'packages/shared/**'
       - 'packages/quiz-api/**'
       - 'packages/chat-api/**'
+      - 'packages/coach-api/**'
+      - 'packages/agent-tools/**'
       - 'package.json'
       - 'tsconfig.json'
       - '.github/workflows/deploy-dev.yml'
@@ -124,6 +126,123 @@ jobs:
             --region ap-northeast-1
 
       - name: Wait for chat-api update
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --region ap-northeast-1
+
+
+  deploy-coach-api:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build shared + coach-api
+        run: npm run build:coach-api
+
+      - name: Package coach-api
+        working-directory: packages/coach-api
+        run: |
+          mkdir -p deploy
+          cp -r dist/* deploy/
+          cp -r ../../node_modules deploy/
+          cd deploy && zip -r ../function.zip . && cd ..
+          rm -rf deploy
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::459532536546:role/dev-apne1-github-actions-webapi-role
+          aws-region: ap-northeast-1
+
+      - name: Get coach-api Lambda function name
+        id: cfn-outputs
+        run: |
+          FUNCTION_NAME=$(aws cloudformation describe-stacks \
+            --stack-name dev-bhs-indonesia-webapi \
+            --region ap-northeast-1 \
+            --query "Stacks[0].Outputs[?OutputKey=='CoachApiFunctionName'].OutputValue" \
+            --output text)
+          echo "function_name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy coach-api
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --zip-file fileb://packages/coach-api/function.zip \
+            --region ap-northeast-1
+
+      - name: Wait for coach-api update
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --region ap-northeast-1
+
+  deploy-agent-tools:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build shared + agent-tools
+        run: npm run build:agent-tools
+
+      - name: Package agent-tools
+        working-directory: packages/agent-tools
+        run: |
+          mkdir -p deploy
+          cp -r dist/* deploy/
+          cp -r ../../node_modules deploy/
+          cd deploy && zip -r ../function.zip . && cd ..
+          rm -rf deploy
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::459532536546:role/dev-apne1-github-actions-webapi-role
+          aws-region: ap-northeast-1
+
+      - name: Get agent-tools Lambda function name
+        id: cfn-outputs
+        run: |
+          FUNCTION_NAME=$(aws cloudformation describe-stacks \
+            --stack-name dev-bhs-coach-agent \
+            --region ap-northeast-1 \
+            --query "Stacks[0].Outputs[?OutputKey=='AgentToolsFnArn'].OutputValue" \
+            --output text)
+          echo "function_name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy agent-tools
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
+            --zip-file fileb://packages/agent-tools/function.zip \
+            --region ap-northeast-1
+
+      - name: Wait for agent-tools update
         run: |
           aws lambda wait function-updated \
             --function-name ${{ steps.cfn-outputs.outputs.function_name }} \
