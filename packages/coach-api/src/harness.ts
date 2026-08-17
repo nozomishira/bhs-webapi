@@ -1,8 +1,8 @@
 /**
  * Coach Agent Harness 呼び出しモジュール
  *
- * InvokeHarness API で bhs_coach_agent を呼ぶ。
- * ユーザーID をメッセージに含めて、Agent がツールで参照できるようにする。
+ * Lambda で事前に DynamoDB を集計し、サマリーを含めて InvokeHarness を呼ぶ。
+ * Harness はモデル推論のみ（ツール呼び出しなし = 高速 + 低コスト）。
  */
 import * as aws4 from 'aws4';
 
@@ -11,18 +11,20 @@ const HARNESS_ARN = process.env.COACH_HARNESS_ARN!;
 
 /**
  * Coach Harness を呼び出す
+ * @param message ユーザーの質問
+ * @param userSummary Lambda で集計した学習データサマリー
  */
-export async function invokeCoachHarness(message: string, userId: string): Promise<string> {
+export async function invokeCoachHarness(message: string, userSummary: string): Promise<string> {
   if (!HARNESS_ARN) {
     throw new Error('COACH_HARNESS_ARN environment variable is not set');
   }
 
-  // ユーザーID を含めて Agent がツールで参照できるようにする
-  const userContext = `[ユーザーID: ${userId}] ${message}`;
+  // サマリーをシステム的なコンテキストとして最初のメッセージに含める
+  const fullMessage = `${userSummary}\n\n【ユーザーの質問】\n${message}`;
 
   const body = JSON.stringify({
     messages: [
-      { role: 'user', content: [{ text: userContext }] },
+      { role: 'user', content: [{ text: fullMessage }] },
     ],
   });
 
@@ -67,9 +69,6 @@ export async function invokeCoachHarness(message: string, userId: string): Promi
   return parseStreamingResponse(responseText);
 }
 
-/**
- * ストリーミングレスポンスから text を結合
- */
 function parseStreamingResponse(raw: string): string {
   const textParts: string[] = [];
   const jsonPattern = /\{"contentBlockIndex":\d+,"delta":\{"text":"((?:[^"\\]|\\.)*)"\}\}/g;

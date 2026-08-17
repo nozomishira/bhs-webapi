@@ -4,6 +4,7 @@ import {
   ApplyGuardrailCommand,
 } from '@aws-sdk/client-bedrock-runtime';
 import { invokeCoachHarness } from '../harness';
+import { buildUserSummary } from '../summary';
 
 const bedrockClient = new BedrockRuntimeClient({
   region: process.env.BEDROCK_REGION ?? 'ap-northeast-1',
@@ -51,9 +52,10 @@ export async function handleCoach(
     }
   }
 
-  // Coach Harness 呼び出し
+  // Coach Harness 呼び出し（サマリー付き）
   try {
-    const reply = await invokeCoachHarness(message, resolvedUserId);
+    const userSummary = await buildUserSummary(resolvedUserId);
+    const reply = await invokeCoachHarness(message, userSummary);
     return respond(200, { success: true, reply });
   } catch (err: unknown) {
     console.error('Coach invocation error:', err);
